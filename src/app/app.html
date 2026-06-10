@@ -1,61 +1,57 @@
-<div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; height: 90vh;">
+<div class="premium-wrapper">
+  <div class="glass-panel">
 
-  <h2 style="text-align: center; color: #333; margin-bottom: 10px;">{{ title() }}</h2>
-  <p style="text-align: center; color: #666; font-size: 14px; margin-top: 0;">Speak your message, then send it to get a voice reply.</p>
+    <div class="chat-header">
+      <h2>{{ title() }}</h2>
+      <p>Auto-sends after a brief pause</p>
+    </div>
 
-  <div style="flex: 1; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+    <div class="chat-container">
+      
+      @if (chatHistory().length === 0) {
+        <div style="margin: auto; text-align: center; color: #64748b; font-size: 15px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+          <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 24px;">
+            🎙️
+          </div>
+          Tap the mic and say hello
+        </div>
+      }
 
-    @if (chatHistory().length === 0) {
-      <div style="text-align: center; color: #aaa; margin-top: auto; margin-bottom: auto;">
-        No messages yet. Start speaking!
-      </div>
-    }
-
-    @for (msg of chatHistory(); track $index) {
-      <div [style.align-self]="msg.sender === 'User' ? 'flex-end' : 'flex-start'"
-           [style.background-color]="msg.sender === 'User' ? '#DCF8C6' : '#fff'"
-           [style.border]="msg.sender === 'User' ? 'none' : '1px solid #ddd'"
-           style="padding: 10px 15px; border-radius: 15px; max-width: 75%; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
-        <strong [style.color]="msg.sender === 'User' ? '#075E54' : '#333'" style="font-size: 12px; display: block; margin-bottom: 4px;">
-          {{ msg.sender }}
-        </strong>
-        <span style="color: #222; line-height: 1.4;">{{ msg.text }}</span>
-      </div>
-    }
-  </div>
-
-  <div style="border: 1px solid #ccc; border-radius: 8px; background-color: #fff; padding: 15px; display: flex; flex-direction: column; gap: 10px;">
-
-    <div style="min-height: 40px; padding: 10px; background-color: #f1f1f1; border-radius: 6px; color: #555; font-style: italic;">
-      @if (recognizedText()) {
-        {{ recognizedText() }}
-      } @else {
-        <span style="color: #999;">{{ isRecording() ? 'Listening...' : 'Press the mic and start speaking...' }}</span>
+      @for (msg of chatHistory(); track $index) {
+        <div class="chat-message" 
+             [class.msg-user]="msg.sender === 'User'" 
+             [class.msg-bot]="msg.sender === 'Bot'">
+          {{ msg.text }}
+        </div>
       }
     </div>
 
-    <div style="display: flex; gap: 10px;">
-
-      <button
-        (click)="toggleRecording()"
-        [style.background-color]="isRecording() ? '#f44336' : '#2196F3'"
-        style="flex: 1; padding: 12px; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background-color 0.2s;">
-        @if (isRecording()) {
-          ⏹ Stop Mic
+    @if (recognizedText() || isRecording()) {
+      <div class="transcription-box">
+        @if (recognizedText()) {
+          "{{ recognizedText() }}"
         } @else {
-          🎤 Start Mic
+          <span style="color: #10b981; display: flex; align-items: center; gap: 8px;">
+            <span class="pulsing-dot mic-button-active"></span>
+            Listening...
+          </span>
+        }
+      </div>
+    }
+
+    <div class="control-area">
+      <button 
+        (click)="toggleRecording()"
+        class="mic-btn"
+        [class.mic-button-active]="isRecording()">
+        @if (isRecording()) {
+           ⏹ 
+        } @else {
+           🎤
         }
       </button>
-
-      <button
-        (click)="sendMessage()"
-        [disabled]="!recognizedText()"
-        [style.opacity]="!recognizedText() ? 0.5 : 1"
-        style="flex: 1; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
-        ✉️ Send
-      </button>
-
     </div>
+
   </div>
 
   <router-outlet></router-outlet>
