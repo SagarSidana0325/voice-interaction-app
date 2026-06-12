@@ -7,7 +7,7 @@
     </div>
 
     <div class="chat-container">
-      
+
       @if (chatHistory().length === 0) {
         <div style="margin: auto; text-align: center; color: #64748b; font-size: 15px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
           <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 24px;">
@@ -18,8 +18,8 @@
       }
 
       @for (msg of chatHistory(); track $index) {
-        <div class="chat-message" 
-             [class.msg-user]="msg.sender === 'User'" 
+        <div class="chat-message"
+             [class.msg-user]="msg.sender === 'User'"
              [class.msg-bot]="msg.sender === 'Bot'">
           {{ msg.text }}
         </div>
@@ -40,12 +40,12 @@
     }
 
     <div class="control-area">
-      <button 
+      <button
         (click)="toggleRecording()"
         class="mic-btn"
         [class.mic-button-active]="isRecording()">
         @if (isRecording()) {
-           ⏹ 
+           ⏹
         } @else {
            🎤
         }
