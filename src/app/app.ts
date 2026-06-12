@@ -15,7 +15,7 @@ interface ChatMessage {
   styleUrl: './app.scss' // Keeping your scss reference, but we are using inline styles below for immediate effect
 })
 export class App implements OnInit {
-  protected readonly title = signal('Nova AI'); // Updated title for a premium vibe
+  protected readonly title = signal('Voice Agent'); // Updated title for a premium vibe
 
   // --- Signals for Reactive State ---
   recognizedText = signal('');
@@ -114,7 +114,7 @@ export class App implements OnInit {
   // --- 3. CHAT LOGIC & TEXT TO SPEECH ---
   sendMessage() {
     clearTimeout(this.silenceTimer); // Ensure timer is cleared
-    
+
     const userText = this.recognizedText().trim();
     if (!userText) return;
 
